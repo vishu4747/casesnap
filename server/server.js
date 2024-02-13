@@ -1,6 +1,8 @@
 const express = require("express");
 const dbConnection = require("./utils/dbConnection");
 const morgan = require("morgan");
+const fs = require("fs");
+const path = require("path");
 const app = express();
 
 // create a write stream (in append mode)
