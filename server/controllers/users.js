@@ -1,7 +1,8 @@
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
+const CustomError = require("../utils/CustomError");
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const { name, username, password, email, phone_no } = req.body;
     const userData = await User.create({
@@ -16,6 +17,7 @@ const createUser = async (req, res) => {
       .json({ msg: userData, token: await userData.generateToken() });
   } catch (err) {
     console.log(err);
+    next(err);
   }
 };
 
@@ -31,16 +33,22 @@ const validateUser = async (req, res, next) => {
     return res.status(200).json({ userData });
   } catch (err) {
     console.log(err);
+    next(err);
   }
 };
 
-const verifyToken = async (req, res) => {
+const verifyToken = async (req, res, next) => {
   try {
     const token = req.body.token;
+    if (!token) {
+      const error = new CustomError("Token is required", 400);
+      next(error);
+    }
     const tokenData = jwt.verify(token, "ABCDEFGH");
     return res.status(200).json({ msg: tokenData });
   } catch (err) {
     console.log(err);
+    next(err);
   }
 };
 
