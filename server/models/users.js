@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: "string",
+    unique: true,
     required: true,
   },
   phone_no: {
@@ -22,6 +23,10 @@ const userSchema = new mongoose.Schema({
   password: {
     type: "string",
     required: true,
+  },
+  role: {
+    type: "string",
+    default: "user",
   },
 });
 
