@@ -6,6 +6,7 @@ const path = require("path");
 const app = express();
 const userRouter = require("./routes/users");
 const errorMiddleware = require("./middleware/error-middleware");
+const isAuthenticated = require("../server/middleware/auth-middleware");
 
 // create a write stream (in append mode)
 const accessLogStream = fs.createWriteStream(
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 
 app.use(errorMiddleware);
+app.use(isAuthenticated);
 
 const PORT = 3000;
 dbConnection

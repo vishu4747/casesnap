@@ -30,7 +30,11 @@ const validateUser = async (req, res, next) => {
     if (!isPasswordValid) {
       return res.status(404).json({ msg: "Invalid password" });
     }
-    return res.status(200).json({ userData });
+    return res.status(200).json({
+      message: "Login Successfull",
+      token: await userData.generateToken(),
+      userId: userData._id.toString(),
+    });
   } catch (err) {
     console.log(err);
     next(err);
@@ -41,8 +45,7 @@ const verifyToken = async (req, res, next) => {
   try {
     const token = req.body.token;
     if (!token) {
-      const error = new CustomError("Token is required", 400);
-      next(error);
+      next(new CustomError("Token is required", 400));
     }
     const tokenData = jwt.verify(token, "ABCDEFGH");
     return res.status(200).json({ msg: tokenData });
@@ -52,4 +55,9 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, validateUser, verifyToken };
+const upload = async (req, res, next) => {
+  console.log(req.user);
+  return res.status(200).json({ msg: "File Uploaded Successfully" });
+};
+
+module.exports = { createUser, validateUser, verifyToken, upload };

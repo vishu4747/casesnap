@@ -55,6 +55,7 @@ userSchema.methods.generateToken = async function () {
     return jwt.sign(
       {
         username: this.username,
+        email: this.email,
       },
       "ABCDEFGH"
     );
