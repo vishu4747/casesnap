@@ -60,4 +60,17 @@ const upload = async (req, res, next) => {
   return res.status(200).json({ msg: "File Uploaded Successfully" });
 };
 
-module.exports = { createUser, validateUser, verifyToken, upload };
+const getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.find().select("-password");
+    res.status(200).json({
+      msg: "All users fetched successfully",
+      dataCount: allUsers.length,
+      data: allUsers,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers };

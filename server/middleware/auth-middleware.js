@@ -1,3 +1,4 @@
+const User = require("../models/users");
 const CustomError = require("../utils/CustomError");
 
 const jwt = require("jsonwebtoken");
@@ -5,12 +6,13 @@ const jwt = require("jsonwebtoken");
 const isAuthenticated = async (req, res, next) => {
   try {
     const token = req.headers.token;
-    console.log(token);
     if (!token) {
       next(new CustomError("Please provide token", 400));
     }
     const tokenData = jwt.verify(token, "ABCDEFGH");
-    req.user = tokenData;
+    const userData = await User.findOne({ email: tokenData.email });
+    if (!userData) next(new CustomError("Invalid token", 400));
+    req.user = userData;
     next();
   } catch (err) {
     console.log(err);
