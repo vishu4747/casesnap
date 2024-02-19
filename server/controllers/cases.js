@@ -81,4 +81,28 @@ const updateCaseStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { createCase, getMyCases, updateCase, updateCaseStatus };
+const getAllCases = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 10;
+    const allCases = await Case.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .populate("createdBy", "name");
+    res.status(200).json({
+      message: "All Cases",
+      dataCount: allCases.length,
+      data: allCases,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createCase,
+  getMyCases,
+  updateCase,
+  updateCaseStatus,
+  getAllCases,
+};

@@ -62,10 +62,19 @@ const upload = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find().select("-password");
+    const page = parseInt(req.query.page) || 1;
+    console.log(page, "page");
+    const pageSize = 10;
+    const totalUsers = await User.countDocuments();
+    const allUsers = await User.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .select("-password");
     res.status(200).json({
       msg: "All users fetched successfully",
-      dataCount: allUsers.length,
+      dataCount: totalUsers,
+      totalPages: Math.ceil(totalUsers / pageSize),
+      currentPage: page,
       data: allUsers,
     });
   } catch (err) {
