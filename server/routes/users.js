@@ -9,7 +9,7 @@ router.post("/create", userController.createUser);
 router.post("/validateUser", userController.validateUser);
 router.post("/verifyToken", userController.verifyToken);
 router.post("/upload", isAuthenticated, upload, userController.upload);
-
+// router.get("/rahul",userController.rahul);
 //Admin routes
 router.get(
   "/getAllUsers",

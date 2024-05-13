@@ -26,6 +26,7 @@ const validateUser = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password ?? "";
     const userData = await User.findOne({ email });
+    console.log("UserData",userData)
     const isPasswordValid = await userData.validatePassword(password);
     if (!isPasswordValid) {
       return res.status(404).json({ msg: "Invalid password" });
@@ -73,4 +74,13 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+// const rahul = async (req, res, next) => {
+//   try {
+//    console.log("rahul winnnn")
+//   } catch (err) {
+//     next(err);
+//   }
+// }; 
+
+// module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers,rahul };
 module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers };

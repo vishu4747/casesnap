@@ -11,7 +11,7 @@ const errorMiddleware = require("./middleware/error-middleware");
 const isAuthenticated = require("./middleware/auth-middleware");
 const removeKeysMiddleware = require("./middleware/update-middleware");
 const isAuthorized = require("./middleware/authorized-middleware");
-
+const cors = require('cors')
 //config
 dotenv.config({
   path: "./config/config.env",
@@ -24,21 +24,30 @@ const accessLogStream = fs.createWriteStream(
     flags: "a",
   }
 );
-
+app.use(cors())
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(express.json());
+
+// app.use('/rahul', (req, res, next) => {
+//   const msg = req.query.msg;
+//   console.log("jj",req.query)
+//   console.log('msg', msg)
+//   res.status(200).json({
+//     msg: "data received"
+//   })
+// })
 
 //routes
 app.use("/api/users", userRouter);
 app.use("/api/case", caseRouter);
 
-//middlewares
+// middlewares
 app.use(errorMiddleware);
 app.use(isAuthenticated);
 app.use(removeKeysMiddleware);
 app.use(isAuthorized);
 
-// const PORT = 3000;
+const PORT = 3000;
 dbConnection
   .then(() => {
     console.log("Connection established");
