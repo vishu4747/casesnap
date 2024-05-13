@@ -59,6 +59,9 @@ userSchema.methods.generateToken = async function () {
         email: this.email,
       },
       "ABCDEFGH"
+      ,{
+        expiresIn:'2h'//expiring the token
+      }
     );
   } catch (err) {
     console.log(err);

@@ -74,6 +74,22 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+
+const getUser = async (req, res, next) => {
+  try {
+    return 'HNyjj'
+    // const id = req.params.id;
+    // return id
+    const userData = await User.find({"_id": id}).select("-password");
+    res.status(200).json({
+      msg: "User fetched successfully",
+      data: userData,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // const rahul = async (req, res, next) => {
 //   try {
 //    console.log("rahul winnnn")
@@ -83,4 +99,4 @@ const getAllUsers = async (req, res, next) => {
 // }; 
 
 // module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers,rahul };
-module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers };
+module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers, getUser };
