@@ -77,10 +77,9 @@ const getAllUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    return 'HNyjj'
-    // const id = req.params.id;
-    // return id
-    const userData = await User.find({"_id": id}).select("-password");
+   console.log("req,res",req,res) 
+    const id = req.params.id; // Extract the id from request parameters
+    const userData = await User.findById(id).select("-password"); // Use findById to find user by ID
     res.status(200).json({
       msg: "User fetched successfully",
       data: userData,
@@ -89,6 +88,7 @@ const getUser = async (req, res, next) => {
     next(err);
   }
 };
+
 
 // const rahul = async (req, res, next) => {
 //   try {

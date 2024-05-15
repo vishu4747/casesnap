@@ -9,7 +9,8 @@ router.post("/create", userController.createUser);
 router.post("/validateUser", userController.validateUser);
 router.post("/verifyToken", userController.verifyToken);
 router.post("/upload", isAuthenticated, upload, userController.upload);
-router.get("/getuser", userController.getUser);
+router.get("/getuser/:id",isAuthenticated,
+isAuthorized, userController.getUser);
 // router.get("/rahul",userController.rahul);
 //Admin routes
 router.get(
