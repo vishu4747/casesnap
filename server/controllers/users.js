@@ -26,7 +26,7 @@ const validateUser = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password ?? "";
     const userData = await User.findOne({ email });
-    console.log("UserData",userData)
+    console.log("UserData", userData);
     const isPasswordValid = await userData.validatePassword(password);
     if (!isPasswordValid) {
       return res.status(404).json({ msg: "Invalid password" });
@@ -63,10 +63,19 @@ const upload = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find().select("-password");
+    const page = parseInt(req.query.page) || 1;
+    console.log(page, "page");
+    const pageSize = 10;
+    const totalUsers = await User.countDocuments();
+    const allUsers = await User.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .select("-password");
     res.status(200).json({
-      message: "All users fetched successfully",
-      dataCount: allUsers.length,
+      msg: "All users fetched successfully",
+      dataCount: totalUsers,
+      totalPages: Math.ceil(totalUsers / pageSize),
+      currentPage: page,
       data: allUsers,
     });
   } catch (err) {
@@ -74,10 +83,9 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-
 const getUser = async (req, res, next) => {
   try {
-   console.log("req,res",req,res) 
+    console.log("req,res", req, res);
     const id = req.params.id; // Extract the id from request parameters
     const userData = await User.findById(id).select("-password"); // Use findById to find user by ID
     res.status(200).json({
@@ -89,14 +97,21 @@ const getUser = async (req, res, next) => {
   }
 };
 
-
 const rahul = async (req, res, next) => {
   try {
-   console.log("rahul winnnn")
+    console.log("rahul winnnn");
   } catch (err) {
     next(err);
   }
-}; 
+};
 
-module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers,getUser,rahul };
+module.exports = {
+  createUser,
+  validateUser,
+  verifyToken,
+  upload,
+  getAllUsers,
+  getUser,
+  rahul,
+};
 // module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers, getUser };

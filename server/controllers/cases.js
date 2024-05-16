@@ -41,7 +41,7 @@ const getMyCases = async (req, res, next) => {
 
 const getCase = async (req, res, next) => {
   try {
-   console.log("req,res",req,res) 
+    console.log("req,res", req, res);
     const id = req.params.id; // Extract the id from request parameters
     const Cases = await Case.findById(id); // Use findById to find user by ID
     res.status(200).json({
@@ -59,7 +59,9 @@ const updateCase = async (req, res, next) => {
     const body = req.body;
 
     // Update the document and wait for the result
-    const updatedDocument = await Case.findByIdAndUpdate(id, body, { new: true });
+    const updatedDocument = await Case.findByIdAndUpdate(id, body, {
+      new: true,
+    });
 
     // If no document is found with the provided id, handle the case
     if (!updatedDocument) {
@@ -67,13 +69,14 @@ const updateCase = async (req, res, next) => {
     }
 
     // Send a response with the updated document
-    res.status(200).json({ message: "Case updated successfully", data: updatedDocument });
+    res
+      .status(200)
+      .json({ message: "Case updated successfully", data: updatedDocument });
   } catch (err) {
     // Pass errors to the error handling middleware
     next(err);
   }
 };
-
 
 const updateCaseStatus = async (req, res, next) => {
   try {
@@ -101,4 +104,29 @@ const updateCaseStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { createCase, getMyCases, updateCase, updateCaseStatus,getCase };
+const getAllCases = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 10;
+    const allCases = await Case.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .populate("createdBy", "name");
+    res.status(200).json({
+      message: "All Cases",
+      dataCount: allCases.length,
+      data: allCases,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createCase,
+  getMyCases,
+  updateCase,
+  updateCaseStatus,
+  getAllCases,
+  getCase,
+};
