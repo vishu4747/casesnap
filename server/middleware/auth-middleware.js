@@ -7,7 +7,7 @@ const isAuthenticated = async (req, res, next) => {
   try {
     const token = req.headers.token;
     if (!token) {
-      next(new CustomError("Please provide token", 400));
+      next(new CustomError("Please provide token", 401));
     }
     const tokenData = jwt.verify(token, "ABCDEFGH");
     const userData = await User.findOne({ email: tokenData.email });
