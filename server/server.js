@@ -28,16 +28,16 @@ app.use(cors())
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(express.json());
 
-// app.use('/rahul', (req, res, next) => {
-//   const msg = req.query.msg;
-//   console.log("jj",req.query)
-//   console.log('msg', msg)
-//   res.status(200).json({
-//     msg: "data received"
-//   })
-// })
+app.use('/rahul', (req, res, next) => {
+  const msg = req.query.msg;
+  console.log("jj",req.query)
+  console.log('msg', msg)
+  res.status(200).json({
+    msg: "data received"
+  })
+})
 
-//routes
+// routes
 app.use("/api/users", userRouter);
 app.use("/api/case", caseRouter);
 

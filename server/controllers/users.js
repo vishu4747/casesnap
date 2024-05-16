@@ -14,7 +14,7 @@ const createUser = async (req, res, next) => {
     });
     return res
       .status(200)
-      .json({ msg: userData, token: await userData.generateToken() });
+      .json({ message: userData, token: await userData.generateToken() });
   } catch (err) {
     console.log(err);
     next(err);
@@ -49,7 +49,7 @@ const verifyToken = async (req, res, next) => {
       next(new CustomError("Token is required", 400));
     }
     const tokenData = jwt.verify(token, "ABCDEFGH");
-    return res.status(200).json({ msg: tokenData });
+    return res.status(200).json({ message: tokenData });
   } catch (err) {
     console.log(err);
     next(err);
@@ -58,14 +58,14 @@ const verifyToken = async (req, res, next) => {
 
 const upload = async (req, res, next) => {
   console.log(req.user);
-  return res.status(200).json({ msg: "File Uploaded Successfully" });
+  return res.status(200).json({ message: "File Uploaded Successfully" });
 };
 
 const getAllUsers = async (req, res, next) => {
   try {
     const allUsers = await User.find().select("-password");
     res.status(200).json({
-      msg: "All users fetched successfully",
+      message: "All users fetched successfully",
       dataCount: allUsers.length,
       data: allUsers,
     });
@@ -81,7 +81,7 @@ const getUser = async (req, res, next) => {
     const id = req.params.id; // Extract the id from request parameters
     const userData = await User.findById(id).select("-password"); // Use findById to find user by ID
     res.status(200).json({
-      msg: "User fetched successfully",
+      message: "User fetched successfully",
       data: userData,
     });
   } catch (err) {
@@ -90,13 +90,13 @@ const getUser = async (req, res, next) => {
 };
 
 
-// const rahul = async (req, res, next) => {
-//   try {
-//    console.log("rahul winnnn")
-//   } catch (err) {
-//     next(err);
-//   }
-// }; 
+const rahul = async (req, res, next) => {
+  try {
+   console.log("rahul winnnn")
+  } catch (err) {
+    next(err);
+  }
+}; 
 
-// module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers,rahul };
-module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers, getUser };
+module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers,getUser,rahul };
+// module.exports = { createUser, validateUser, verifyToken, upload, getAllUsers, getUser };

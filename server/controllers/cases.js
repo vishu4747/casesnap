@@ -39,21 +39,41 @@ const getMyCases = async (req, res, next) => {
   }
 };
 
-const updateCase = async (req, res, next) => {
+const getCase = async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const body = req.body;
-    const updatedDocument = await Case.findByIdAndUpdate(id, body, {
-      new: true,
-      runValidators: true,
+   console.log("req,res",req,res) 
+    const id = req.params.id; // Extract the id from request parameters
+    const Cases = await Case.findById(id); // Use findById to find user by ID
+    res.status(200).json({
+      message: "case fetched successfully",
+      data: Cases,
     });
-    res
-      .status(200)
-      .json({ message: "Case updated successfully", data: updatedDocument });
   } catch (err) {
     next(err);
   }
 };
+
+const updateCase = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const body = req.body;
+
+    // Update the document and wait for the result
+    const updatedDocument = await Case.findByIdAndUpdate(id, body, { new: true });
+
+    // If no document is found with the provided id, handle the case
+    if (!updatedDocument) {
+      return res.status(404).json({ message: "Case not found" });
+    }
+
+    // Send a response with the updated document
+    res.status(200).json({ message: "Case updated successfully", data: updatedDocument });
+  } catch (err) {
+    // Pass errors to the error handling middleware
+    next(err);
+  }
+};
+
 
 const updateCaseStatus = async (req, res, next) => {
   try {
@@ -81,4 +101,4 @@ const updateCaseStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { createCase, getMyCases, updateCase, updateCaseStatus };
+module.exports = { createCase, getMyCases, updateCase, updateCaseStatus,getCase };

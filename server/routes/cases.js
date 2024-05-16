@@ -6,6 +6,7 @@ const removeKeysMiddleware = require("../middleware/update-middleware");
 
 router.post("/createCase", isAuthenticated, caseController.createCase);
 router.get("/getMyCases", isAuthenticated, caseController.getMyCases);
+router.get("/getCase/:id", isAuthenticated, caseController.getCase);
 router.post(
   "/update/:id",
   isAuthenticated,
