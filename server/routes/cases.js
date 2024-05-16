@@ -5,7 +5,6 @@ const isAuthenticated = require("../middleware/auth-middleware");
 const removeKeysMiddleware = require("../middleware/update-middleware");
 const isAuthorized = require("../middleware/authorized-middleware");
 
-router.post("/createCase", isAuthenticated, caseController.createCase);
 router.get("/getMyCases", isAuthenticated, caseController.getMyCases);
 router.get("/getCase/:id", isAuthenticated, caseController.getCase);
 router.post(
@@ -14,7 +13,7 @@ router.post(
   removeKeysMiddleware(["id", "createdAt", "createdBy"]),
   caseController.updateCase
 );
-router.get(
+router.put(
   "/updateStatus/:id",
   isAuthenticated,
   caseController.updateCaseStatus
@@ -26,6 +25,20 @@ router.get(
   isAuthenticated,
   isAuthorized,
   caseController.getAllCases
+);
+
+router.post(
+  "/createCase",
+  isAuthenticated,
+  isAuthorized,
+  caseController.createCase
+);
+
+router.post(
+  "/assignCase",
+  isAuthenticated,
+  isAuthorized,
+  caseController.assignCase
 );
 
 module.exports = router;

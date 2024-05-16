@@ -7,4 +7,8 @@ const errorMiddleware = (err, req, res, next) => {
   return res.status(statusCode).json({ status, message, extraDetails });
 };
 
-module.exports = errorMiddleware;
+const asyncError = (passedFunction) => (req, res, next) => {
+  Promise.resolve(passedFunction(req, res, next)).catch(next);
+};
+
+module.exports = { errorMiddleware, asyncError };

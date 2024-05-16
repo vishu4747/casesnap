@@ -14,6 +14,10 @@ const caseSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
+  assignedTo: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
   status: {
     type: "string",
     enum: ["pending", "in_progress", "complete"],
