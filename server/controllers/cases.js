@@ -92,7 +92,8 @@ const getAllCases = asyncError(async (req, res, next) => {
   const allCases = await Case.find()
     .skip((page - 1) * pageSize)
     .limit(pageSize)
-    .populate("createdBy", "name");
+    .populate("createdBy", "name")
+    .populate("assignedTo", "name");
   res.status(200).json({
     message: "All Cases",
     dataCount: allCases.length,

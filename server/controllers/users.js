@@ -85,9 +85,11 @@ const getAllUsers = asyncError(async (req, res, next) => {
 
   // Map cases count to users
   const usersWithCasesCount = allUsers.map((user) => {
-    const casesCount = casesCountByStatusPerUser.find((count) =>
-      count._id.equals(user._id)
+    const casesCount = casesCountByStatusPerUser.find((count) => {
+      return count._id !== null ? count._id.equals(user._id) : false;
+    }
     ) || { casesCountByStatus: [] };
+
     return {
       _id: user._id,
       name: user.name,
@@ -99,7 +101,7 @@ const getAllUsers = asyncError(async (req, res, next) => {
   });
 
   res.status(200).json({
-    msg: "All users fetched successfully",
+    message: "All users fetched successfully",
     dataCount: totalUsers,
     totalPages: Math.ceil(totalUsers / pageSize),
     currentPage: page,
