@@ -88,15 +88,17 @@ const updateCaseStatus = asyncError(async (req, res, next) => {
 
 const getAllCases = asyncError(async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
-  const pageSize = 10;
+  const pageSize = parseInt(req.query.pageSize)||10;
+  const skip = parseInt(req.query.skip)||0;
+  const dataCount= await Case.countDocuments();
   const allCases = await Case.find()
-    .skip((page - 1) * pageSize)
+    .skip(skip)
     .limit(pageSize)
     .populate("createdBy", "name")
     .populate("assignedTo", "name");
   res.status(200).json({
     message: "All Cases",
-    dataCount: allCases.length,
+    dataCount,
     data: allCases,
   });
 });
