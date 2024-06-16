@@ -26,6 +26,9 @@ const caseSchema = new mongoose.Schema({
   startDate: {
     type: Date,
   },
+  nextCaseDate: {
+    type: Date,
+  },
   fees: {
     type: "number",
     required: [true, "fees must be provided"],

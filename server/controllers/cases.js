@@ -4,9 +4,9 @@ const User = require("../models/users");
 const CustomError = require("../utils/CustomError");
 
 const createCase = asyncError(async (req, res, next) => {
-  const { name, caseType, startDate, fees } = req.body;
+  const { name, caseType, startDate, fees, description } = req.body;
   const createdBy = req.user._id;
-  if (!name || !caseType || !startDate || !fees) {
+  if (!name || !caseType || !startDate || !fees || !description) {
     next(new CustomError("Plase provide all data", 401));
   }
   const caseData = await Case.create({
@@ -14,6 +14,7 @@ const createCase = asyncError(async (req, res, next) => {
     caseType,
     startDate,
     fees,
+    description,
     createdBy,
   });
   return res
