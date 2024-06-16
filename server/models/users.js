@@ -5,28 +5,28 @@ const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema({
   name: {
     type: "string",
-    required: true,
+    required: [true, "Name must be provided"],
   },
   username: {
     type: "string",
-    required: true,
+    required: [true, "Username must be provided"],
   },
   email: {
     type: "string",
-    unique: true,
-    required: true,
+    unique: [true, "Email must be unique"],
+    required: [true, "Email must be provided"],
   },
   phone_no: {
     type: "number",
-    required: true,
+    required: [true, "Phone no must be provided"],
   },
   password: {
     type: "string",
-    required: true,
+    required: [true, "Password must be provided"],
   },
   role: {
     type: "string",
-    enum: ['user', 'admin'],
+    enum: ["user", "admin"],
     default: "user",
   },
 });
@@ -58,9 +58,9 @@ userSchema.methods.generateToken = async function () {
         username: this.username,
         email: this.email,
       },
-      "ABCDEFGH"
-      ,{
-        expiresIn:'2h'//expiring the token
+      "ABCDEFGH",
+      {
+        expiresIn: "2h", //expiring the token
       }
     );
   } catch (err) {

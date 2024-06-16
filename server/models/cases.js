@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const caseSchema = new mongoose.Schema({
   name: {
     type: "string",
-    unique: true,
-    required: true,
+    unique: [true, "Case name must be unique"],
+    required: [true, "Case name must be provided"],
   },
   caseType: {
     type: "string",
-    required: true,
+    required: [true, "Case type must be provided"],
   },
   createdBy: {
     type: mongoose.Schema.ObjectId,
@@ -28,7 +28,7 @@ const caseSchema = new mongoose.Schema({
   },
   fees: {
     type: "number",
-    required: true,
+    required: [true, "fees must be provided"],
   },
   createdAt: {
     type: Date,
