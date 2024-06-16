@@ -2,6 +2,7 @@ const { asyncError } = require("../middleware/error-middleware");
 const Case = require("../models/cases");
 const User = require("../models/users");
 const CustomError = require("../utils/CustomError");
+const { Types } = require("mongoose");
 
 const createCase = asyncError(async (req, res, next) => {
   const { name, caseType, startDate, fees, description } = req.body;
@@ -90,9 +91,31 @@ const updateCaseStatus = asyncError(async (req, res, next) => {
 const getAllCases = asyncError(async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 10;
-  const skip = parseInt(req.query.skip) || 0;
-  const dataCount = await Case.countDocuments();
-  const allCases = await Case.find()
+  const skip = (page - 1) * pageSize;
+
+  let query = {};
+
+  // Check if there's a search query
+  if (req.query.q) {
+    const searchQuery = req.query.q;
+    query = {
+      $or: [
+        { name: { $regex: new RegExp(searchQuery, "i") } }, // case insensitive search for name
+        { caseType: searchQuery },
+        { status: searchQuery },
+        {
+          assignedTo: {
+            $in: await User.find({
+              name: { $regex: new RegExp(searchQuery, "i") },
+            }).select("_id"),
+          },
+        },
+      ],
+    };
+  }
+
+  const dataCount = await Case.countDocuments(query);
+  const allCases = await Case.find(query)
     .skip(skip)
     .limit(pageSize)
     .populate("createdBy", "name")
