@@ -30,6 +30,9 @@ const caseSchema = new mongoose.Schema({
     type: "number",
     required: [true, "fees must be provided"],
   },
+  description: {
+    type: "string",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
