@@ -88,9 +88,9 @@ const updateCaseStatus = asyncError(async (req, res, next) => {
 
 const getAllCases = asyncError(async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
-  const pageSize = parseInt(req.query.pageSize)||10;
-  const skip = parseInt(req.query.skip)||0;
-  const dataCount= await Case.countDocuments();
+  const pageSize = parseInt(req.query.pageSize) || 10;
+  const skip = parseInt(req.query.skip) || 0;
+  const dataCount = await Case.countDocuments();
   const allCases = await Case.find()
     .skip(skip)
     .limit(pageSize)
@@ -114,7 +114,7 @@ const assignCase = asyncError(async (req, res, next) => {
   if (caseData.length < 1)
     next(new CustomError("Didn't find any case with case_id", 400));
   const caseAssignedTo = caseData.assignedTo ?? "";
-  if (caseAssignedTo === "")
+  if (caseAssignedTo !== "")
     next(new CustomError("Case is already assigened to another user", 400));
   const updatedCase = await Case.findByIdAndUpdate(
     case_id,
